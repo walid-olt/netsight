@@ -1,10 +1,8 @@
-import Link from "next/link";
-
 const Logo = () => {
   return (
-    <Link href="/" className="text-2xl font-serif ">
+    <div className="text-2xl font-bold font-serif text-foreground">
       Netsight
-    </Link>
+    </div>
   );
 };
 

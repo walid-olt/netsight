@@ -1710,13 +1710,10 @@ packages:
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
 
-<<<<<<< HEAD
-=======
   slugify@1.6.9:
     resolution: {integrity: sha512-vZ7rfeehZui7wQs438JXBckYLkIIdfHOXsaVEUMyS5fHo1483l1bMdo0EDSWYclY0yZKFOipDy4KHuKs6ssvdg==}
     engines: {node: '>=8.0.0'}
 
->>>>>>> 92b4821 (feat(setup): project setup)
   source-map-js@1.2.1:
     resolution: {integrity: sha512-UXWMKhLOwVKb728IUtQPXxfYU+usdybtUrK/8uGE8CQMvrhOpwvzDBwj0QhSL7MQc7vIsISBG8VQ8+IDQxpfQA==}
     engines: {node: '>=0.10.0'}
@@ -3446,11 +3443,8 @@ snapshots:
 
   sisteransi@1.0.5: {}
 
-<<<<<<< HEAD
-=======
   slugify@1.6.9: {}
 
->>>>>>> 92b4821 (feat(setup): project setup)
   source-map-js@1.2.1: {}
 
   source-map@0.6.1: {}
