@@ -3,7 +3,7 @@ import NavLink from "./Navlink";
 
 export default function Navigation() {
   return (
-    <nav className="flex justify-between px-4 py-2 items-baseline ">
+    <nav className="flex justify-between px-4 py-2 items-center ">
       <div>
         <NavLink href={"/"}>
           <Logo />

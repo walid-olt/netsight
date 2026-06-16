@@ -40,7 +40,7 @@ export default function RootLayout({
       <body className="min-h-full bg-background ">
         <Navigation />
         <DynamicBreadcrumb />
-        <main className="px-4 py-2">{children}</main>
+        <main className=" w-full">{children}</main>
       </body>
     </html>
   );

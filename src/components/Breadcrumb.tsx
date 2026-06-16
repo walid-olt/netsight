@@ -21,9 +21,9 @@ export default function DynamicBreadcrumb() {
     <Breadcrumb className="px-4">
       <BreadcrumbList>
         <BreadcrumbItem>
-          <BreadcrumbLink>
-            <Link href="/">Home</Link>
-          </BreadcrumbLink>
+          <BreadcrumbLink
+            render={() => <Link href="/">Home</Link>}
+          ></BreadcrumbLink>
         </BreadcrumbItem>
 
         {paths.map((path, index) => {
