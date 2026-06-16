@@ -9,7 +9,9 @@ type Props = ComponentProps<typeof Link>;
 export default function NavLink({ className, href, ...rest }: Props) {
   const path = usePathname();
 
-  const isActive = path === href;
+  const hrefString = href.toString();
+
+  const isActive = path === hrefString || path.startsWith(`${hrefString}/`);
 
   return (
     <Link

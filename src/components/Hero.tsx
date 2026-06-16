@@ -9,6 +9,8 @@ const Hero = () => {
         <Image
           width={900}
           height={500}
+          loading="eager"
+          style={{ width: "auto", height: "auto" }}
           src="/hero.jpg"
           aria-hidden={true}
           alt="Hero image"

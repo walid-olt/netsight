@@ -1,4 +1,13 @@
-export default async function ({ params }: PageProps<"/products/[slug]">) {
+import { notFound } from "next/navigation";
+import ProductDetails from "@/components/ProductDetails";
+import products from "@/data";
+export default async function ProductDetailsPage({
+  params,
+}: PageProps<"/products/[slug]">) {
   const { slug } = await params;
-  return <h1>{slug}</h1>;
+  const product = products.find((p) => p.slug === slug.trim());
+  if (!product) {
+    return notFound();
+  }
+  return <ProductDetails product={product} />;
 }

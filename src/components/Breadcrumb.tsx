@@ -18,7 +18,7 @@ export default function DynamicBreadcrumb() {
   const paths = pathname.split("/").filter((path) => path);
 
   return (
-    <Breadcrumb className="px-4">
+    <Breadcrumb className="px-4 py-4">
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink
@@ -36,13 +36,13 @@ export default function DynamicBreadcrumb() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 {isLast ? (
-                  <BreadcrumbPage>{label}</BreadcrumbPage>
+                  <BreadcrumbPage>{label.replaceAll("-", " ")}</BreadcrumbPage>
                 ) : (
-                  <BreadcrumbLink>
-                    {/* we ain't even started yet and I already have to fight with the compiler ☠*/}
-                    {/* @ts-expect-error */}
-                    <Link href={href}>{label}</Link>
-                  </BreadcrumbLink>
+                  <BreadcrumbLink
+                    /* we ain't even started yet and I already have to fight with the compiler ☠*/
+                    /* @ts-expect-error */
+                    render={<Link href={href}>{label}</Link>}
+                  ></BreadcrumbLink>
                 )}
               </BreadcrumbItem>
             </React.Fragment>

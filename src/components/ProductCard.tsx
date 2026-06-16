@@ -2,7 +2,6 @@ import { Bookmark, ExternalLink, Plus } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
-import slugify from "slugify";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { ButtonGroup } from "@/components/ui/button-group";
@@ -23,11 +22,11 @@ type Props = {
 };
 
 export default function ProjectCard({ product }: Props) {
-  const { title, brand, primary_category, price, product_type } = product;
+  const { title, brand, primary_category, price, product_type, slug } = product;
   return (
     <Card className="relative w-full ">
       <Image
-        src={`https://picsum.photos/seed/${slugify(title)}/200/300`}
+        src={`https://picsum.photos/seed/${slug}/200/300`}
         alt="Event cover"
         height={300}
         width={200}
@@ -61,7 +60,7 @@ export default function ProjectCard({ product }: Props) {
               variant={"secondary"}
               nativeButton={false}
               render={
-                <Link href={`/products/${slugify(title)}`}>
+                <Link href={`/products/${slug}`}>
                   details <HugeiconsIcon icon={ExternalLink} />
                 </Link>
               }
