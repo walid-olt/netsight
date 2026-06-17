@@ -1,4 +1,5 @@
-import { Bookmark, ExternalLink, Plus } from "@hugeicons/core-free-icons";
+"use client";
+import { Check, ExternalLink, Plus } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -14,6 +15,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useCartContext } from "@/contexts/cartContext";
 import { formatter } from "@/lib/utils";
 import type { Product } from "@/types/";
 
@@ -22,7 +24,10 @@ type Props = {
 };
 
 export default function ProjectCard({ product }: Props) {
-  const { title, brand, primary_category, price, product_type, slug } = product;
+  const { title, brand, primary_category, price, id, product_type, slug } =
+    product;
+  const { addToCart, items } = useCartContext();
+  const isInCart = items.find((item) => item.id === id);
   return (
     <Card className="relative w-full ">
       <Image
@@ -44,28 +49,35 @@ export default function ProjectCard({ product }: Props) {
 
         <Badge variant="secondary">{product_type}</Badge>
       </CardContent>
-      <CardFooter className="mt-auto">
-        <ButtonGroup className="[&_button]:cursor-pointer">
-          <ButtonGroup>
-            <Button variant={"secondary"}>
-              <HugeiconsIcon icon={Bookmark} />
-            </Button>
-          </ButtonGroup>
-          <ButtonGroup className="w-full">
-            <Button>
-              <HugeiconsIcon icon={Plus} />
-              add to cart
-            </Button>
-            <Button
-              variant={"secondary"}
-              nativeButton={false}
-              render={
-                <Link href={`/products/${slug}`}>
-                  details <HugeiconsIcon icon={ExternalLink} />
-                </Link>
-              }
-            ></Button>
-          </ButtonGroup>
+      <CardFooter className="mt-auto ">
+        <ButtonGroup className="[&_button]:cursor-pointer ">
+          <Button
+            size={"lg"}
+            disabled={!!isInCart}
+            onClick={() => addToCart(product)}
+          >
+            {isInCart ? (
+              <>
+                <HugeiconsIcon icon={Check} />
+                added
+              </>
+            ) : (
+              <>
+                <HugeiconsIcon icon={Plus} />
+                add to cart
+              </>
+            )}
+          </Button>
+          <Button
+            size={"lg"}
+            variant={"secondary"}
+            nativeButton={false}
+            render={
+              <Link href={`/products/${slug}`}>
+                details <HugeiconsIcon icon={ExternalLink} />
+              </Link>
+            }
+          />
         </ButtonGroup>
       </CardFooter>
     </Card>

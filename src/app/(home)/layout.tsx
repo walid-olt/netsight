@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Serif, Inter, JetBrains_Mono } from "next/font/google";
-import "./globals.css";
-import DynamicBreadcrumb from "@/components/Breadcrumb";
+import "@/app/globals.css";
 import Navigation from "@/components/Navigation";
 import { cn } from "@/lib/utils";
 
@@ -40,7 +39,6 @@ export default function RootLayout({
     >
       <body className="min-h-full bg-background ">
         <Navigation />
-        <DynamicBreadcrumb />
         <main className=" w-full">{children}</main>
       </body>
     </html>

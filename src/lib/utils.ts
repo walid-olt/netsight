@@ -7,4 +7,6 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export const formatter = new DataFormatter("fr-MA");
-export const slugify = (value: string) => s(value, "-");
+s.extend({ "|": " " });
+export const slugify = (value: string) =>
+  s(value, { lower: true, strict: true });

@@ -1,13 +1,11 @@
 import { useCallback, useMemo, useState } from "react";
-import type { Product } from "@/types";
+import type { CartItems, Product } from "@/types";
 
-type CartItem = Product & { quantity: number };
-type CartItems = CartItem[];
 // closures, am I right ?
 export default function useCart() {
   const [items, setCartItems] = useState<CartItems>([]);
 
-  const [isCartVisible, setCartVisibility] = useState(false);
+  const [isCartVisible, setCartVisibility] = useState<boolean>(false);
 
   const addToCart = useCallback((product: Product) => {
     setCartItems((prevItems) => {
@@ -34,27 +32,30 @@ export default function useCart() {
     setCartItems([]);
   }, []);
 
-  const isInCart = useCallback(
-    (id: string) => {
-      return !!items.find((item) => item.id === id);
-    },
-    [items],
-  );
-
   const total = useMemo(
     () => items.reduce((acc, item) => acc + item.price * item.quantity, 0),
     [items],
   );
 
-  return {
-    items,
-    isCartVisible,
-    setCartVisibility,
-    isInCart,
-    addToCart,
-    deleteFromCart,
-    updateQuantity,
-    emptyCart,
-    total,
-  };
+  return useMemo(
+    () => ({
+      items,
+      isCartVisible,
+      setCartVisibility,
+      addToCart,
+      deleteFromCart,
+      updateQuantity,
+      emptyCart,
+      total,
+    }),
+    [
+      items,
+      isCartVisible,
+      addToCart,
+      deleteFromCart,
+      updateQuantity,
+      emptyCart,
+      total,
+    ],
+  );
 }
