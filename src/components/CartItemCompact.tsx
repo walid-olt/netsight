@@ -3,7 +3,7 @@ import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ButtonGroup, ButtonGroupText } from "@/components/ui/button-group";
+import { ButtonGroup } from "@/components/ui/button-group";
 import { useCartContext } from "@/contexts/cartContext";
 import { formatter } from "@/lib/utils";
 import type { CartItem } from "@/types";
@@ -27,15 +27,23 @@ export default function CartItemCompact({ item }: Props) {
 
   const { deleteFromCart, updateQuantity } = useCartContext();
 
-  const max = Number(available) || 0;
+  const totalAvailable = Number(available) || 0;
+  const isOutOfStock = totalAvailable <= 0;
+
+  // Disable "+" if out of stock or if cart quantity already reaches maximum available stock
+  const isPlusDisabled = isOutOfStock || quantity >= totalAvailable;
+
+  // Disable "-" if quantity drops to 1 (users should use Trash button to delete)
+  const isMinusDisabled = quantity <= 1;
+
   const unitTotal = price * quantity;
 
   return (
-    <div className="flex gap-4   border-border">
+    <div className="flex gap-4 border-border">
       <div className="w-16 h-16 shrink-0 rounded-md overflow-hidden bg-muted">
         <Image
           src={`https://picsum.photos/seed/${slug}/200/300`}
-          alt="Event cover"
+          alt={title}
           height={300}
           width={200}
           className="h-full w-full object-cover"
@@ -54,7 +62,7 @@ export default function CartItemCompact({ item }: Props) {
           </div>
 
           <div className="text-right">
-            <div className="text-sm font-semibold text-foreground">
+            <div className="text-sm font-semibold text-foreground font-serif">
               {formatter.formatCurrency(unitTotal)}
             </div>
             {discount_pct > 0 && (
@@ -65,36 +73,42 @@ export default function CartItemCompact({ item }: Props) {
           </div>
         </div>
 
-        <div className=" flex items-center justify-between gap-3 mt-2">
+        <div className="flex items-center justify-between gap-3 mt-2">
           <ButtonGroup className="h-8 flex items-center">
-            <ButtonGroup aria-label="Media controls" className="h-fit">
-              <Button
-                size="icon-sm"
-                variant="outline"
-                aria-label="Increase quantity"
-                disabled={max > 0 ? quantity >= max : false}
-                onClick={() => updateQuantity(id, quantity + 1)}
-              >
-                <HugeiconsIcon icon={Plus} />
-              </Button>
-              <Button
-                size="icon-sm"
-                variant="outline"
-                aria-label="Decrease quantity"
-                disabled={quantity <= 1}
-                onClick={() => updateQuantity(id, quantity - 1)}
-              >
-                <HugeiconsIcon icon={Minus} />
-              </Button>
-            </ButtonGroup>
-            <span>{quantity}</span>
+            <Button
+              size="icon-sm"
+              variant="outline"
+              aria-label="Decrease quantity"
+              disabled={isMinusDisabled}
+              onClick={() => updateQuantity(id, quantity - 1)}
+            >
+              <HugeiconsIcon icon={Minus} />
+            </Button>
+
+            <Button
+              size="icon-sm"
+              variant="outline"
+              aria-label="Increase quantity"
+              disabled={isPlusDisabled}
+              onClick={() => updateQuantity(id, quantity + 1)}
+            >
+              <HugeiconsIcon icon={Plus} />
+            </Button>
+
+            <span className="px-3 text-sm font-medium">{quantity}</span>
           </ButtonGroup>
 
           <div className="flex items-center gap-2">
-            {max > 0 ? (
-              <div className="text-xs text-muted-foreground">In stock</div>
+            {isOutOfStock ? (
+              <div className="text-xs text-destructive font-medium">
+                Out of stock
+              </div>
+            ) : totalAvailable - quantity <= 2 ? (
+              <div className="text-xs text-amber-600 font-medium">
+                Only {totalAvailable - quantity} left
+              </div>
             ) : (
-              <div className="text-xs text-destructive">Out of stock</div>
+              <div className="text-xs text-muted-foreground">In stock</div>
             )}
 
             <Button

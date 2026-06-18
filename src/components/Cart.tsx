@@ -52,7 +52,7 @@ export default function CartSheet() {
             {formatter.formatCurrency(total)}
           </span>
         </SheetHeader>
-        <div className="grid flex-1 auto-rows-min gap-6 px-4">
+        <div className="grid flex-1 auto-rows-min gap-6 px-4 overflow-y-scroll">
           {items.length === 0 ? (
             <EmptyCart />
           ) : (

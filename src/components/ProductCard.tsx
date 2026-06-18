@@ -1,5 +1,5 @@
 "use client";
-import { Check, ExternalLink, Plus } from "@hugeicons/core-free-icons";
+import { Check, ExternalLink, Plus, Tag } from "@hugeicons/core-free-icons";
 import { HugeiconsIcon } from "@hugeicons/react";
 import Image from "next/image";
 import Link from "next/link";
@@ -23,16 +23,31 @@ type Props = {
   product: Product;
 };
 
-export default function ProjectCard({ product }: Props) {
-  const { title, brand, primary_category, price, id, product_type, slug } =
-    product;
+export default function ProductCard({ product }: Props) {
+  const {
+    title,
+    brand,
+    primary_category,
+    price,
+    id,
+    product_type,
+    slug,
+    discount_pct,
+    available,
+  } = product;
+
   const { addToCart, items } = useCartContext();
+
+  // Availability variables matching CartItemCompact logic
+  const totalAvailable = Number(available) || 0;
+  const isOutOfStock = totalAvailable <= 0;
   const isInCart = items.find((item) => item.id === id);
+
   return (
-    <Card className="relative w-full ">
+    <Card className="relative w-full " size="sm">
       <Image
         src={`https://picsum.photos/seed/${slug}/200/300`}
-        alt="Event cover"
+        alt={title}
         height={300}
         width={200}
         className="h-48 w-full object-cover"
@@ -42,29 +57,57 @@ export default function ProjectCard({ product }: Props) {
           <Badge variant={"outline"}>{formatter.formatCurrency(price)}</Badge>
         </CardAction>
         <CardTitle>{title}</CardTitle>
-        <CardDescription>{brand}</CardDescription>
+        <CardDescription className="justify-between flex items-center">
+          <span>{brand}</span>
+          {discount_pct > 0 && (
+            <Badge
+              variant="default"
+              className="mb-1.5 bg-green-600 hover:bg-green-700"
+            >
+              <HugeiconsIcon icon={Tag} size={14} className="mr-1 inline" />
+              Save {discount_pct}%
+            </Badge>
+          )}
+        </CardDescription>
       </CardHeader>
-      <CardContent className="flex gap-x-2 mt-auto">
-        <Badge variant="secondary">{primary_category}</Badge>
 
-        <Badge variant="secondary">{product_type}</Badge>
+      <CardContent className="flex flex-col gap-y-2">
+        {/* Category tags */}
+        <div className="flex items-center gap-x-2">
+          <Badge variant="secondary">{primary_category}</Badge>
+          <Badge variant="secondary">{product_type}</Badge>
+        </div>
+
+        {/* Stock status indicator */}
+        {isOutOfStock ? (
+          <div className="text-xs text-destructive font-medium mt-1">
+            Out of stock
+          </div>
+        ) : totalAvailable <= 2 ? (
+          <div className="text-xs text-amber-600 font-medium mt-1">
+            Only {totalAvailable} left in stock
+          </div>
+        ) : null}
       </CardContent>
+
       <CardFooter className="mt-auto ">
         <ButtonGroup className="[&_button]:cursor-pointer ">
           <Button
             size={"lg"}
-            disabled={!!isInCart}
+            disabled={!!isInCart || isOutOfStock}
             onClick={() => addToCart(product)}
           >
-            {isInCart ? (
+            {isOutOfStock ? (
+              "Out of stock"
+            ) : isInCart ? (
               <>
-                <HugeiconsIcon icon={Check} />
-                added
+                <HugeiconsIcon icon={Check} className="mr-1" />
+                Added
               </>
             ) : (
               <>
-                <HugeiconsIcon icon={Plus} />
-                add to cart
+                <HugeiconsIcon icon={Plus} className="mr-1" />
+                Add to cart
               </>
             )}
           </Button>
@@ -74,7 +117,8 @@ export default function ProjectCard({ product }: Props) {
             nativeButton={false}
             render={
               <Link href={`/products/${slug}`}>
-                details <HugeiconsIcon icon={ExternalLink} />
+                Details{" "}
+                <HugeiconsIcon icon={ExternalLink} className="ml-1 inline" />
               </Link>
             }
           />
